@@ -2,6 +2,9 @@
 const expect = require('chai').expect,
         process = require('../lib/index');
 
+let Uint64BE = require("int64-buffer").Uint64BE;
+let Int64BE = require("int64-buffer").Int64BE;
+
 describe('Index', () => {
     let packet_len, imei, cmd, rec_left, rec_total;
 
@@ -16,10 +19,13 @@ describe('Index', () => {
     it("expect to process valid input", () => {
         const buffer = Buffer.from("0045000070473afaedd944000159fc5a40000000d3e542f6184a37820929465a0900000c00070100050005001d3a0c001e0ff0019300000192000000890000010041000004af004dc3", "hex");
         const response = process(buffer);
-
         expect(response).to.not.have.property('error');
         expect(response).to.have.property('data').that.is.an("object");
-        expect(response.data.imei).to.equal(parseInt(imei, 16));
+        const big = new Uint64BE(response.data.imei);
+        // console.log(big);
+        // console.log(parseInt(big.toString(16),16));
+
+        expect(parseInt(big.toString(16), 16)).to.equal(parseInt(imei,16));
         expect(response.data.command_id).to.equal(68);
     });
     it('expect to handle invalid input', () => {

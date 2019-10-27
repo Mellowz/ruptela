@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "crc": "^3.5.0",
+    "int64-buffer": "^0.99.1007",
     "sumov": "^1.1.0"
   },
   "devDependencies": {
