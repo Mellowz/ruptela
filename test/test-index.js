@@ -10,7 +10,7 @@ describe('Index', () => {
 
     beforeEach(() => {
         packet_len = "000b"; //11
-        imei = "000070473afaedd9"; //123451234512345
+        imei = "000070473afaedd9"; //123451234512345  70473AFAEDD9
         cmd = "01";
         rec_left = "00";
         rec_total = "01";
@@ -22,8 +22,7 @@ describe('Index', () => {
         expect(response).to.not.have.property('error');
         expect(response).to.have.property('data').that.is.an("object");
         const big = new Uint64BE(response.data.imei);
-        // console.log(big);
-        // console.log(parseInt(big.toString(16),16));
+
 
         expect(parseInt(big.toString(16), 16)).to.equal(parseInt(imei,16));
         expect(response.data.command_id).to.equal(68);
@@ -96,4 +95,15 @@ describe('Index', () => {
         expect(response).to.have.property('error').that.is.an.instanceof(Error);
         expect(response.error.message).to.have.string("Records size is too small");
     });
+
+
+    // it("expect to handle 'Command_16' input with no value sent for records", () => {
+    //     const str = "9" + "3137CA7877138" + "10" + "7132";
+    //     const buffer = Buffer.from(str, "hex");
+    //     const response = process(buffer);
+
+    //     expect(response).to.not.have.property('data');
+    //     expect(response).to.have.property('error').that.is.an.instanceof(Error);
+    //     expect(response.error.message).to.have.string("Records are not found");
+    // });
 });

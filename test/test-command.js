@@ -4,6 +4,7 @@ const expect = require('chai').expect,
         Segment = require('../lib/segment'),
         Command = require('../lib/command'),
         Command_1 = require('../lib/command/command_1'),
+        // Command_16 = require('../lib/command/command_16'),
         Command_68 = require('../lib/command/command_68'),
         Command_1_68 = require('../lib/command/command_1_68'),
         Payload_1_68 = require('../lib/payload/command_1_68');
@@ -24,6 +25,7 @@ describe('Command_1_68', () => {
 
     beforeEach(() => {
         command_1 = new Command_1();
+        // command_16 = new Command_16();
         command_68 = new Command_68();
         command_1_68 = new Command_1_68(new Payload_1_68());
     });
