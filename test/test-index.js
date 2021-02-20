@@ -2,12 +2,15 @@
 const expect = require('chai').expect,
         process = require('../lib/index');
 
+let Uint64BE = require("int64-buffer").Uint64BE;
+let Int64BE = require("int64-buffer").Int64BE;
+
 describe('Index', () => {
     let packet_len, imei, cmd, rec_left, rec_total;
 
     beforeEach(() => {
         packet_len = "000b"; //11
-        imei = "000070473afaedd9"; //123451234512345
+        imei = "000070473afaedd9"; //123451234512345  70473AFAEDD9
         cmd = "01";
         rec_left = "00";
         rec_total = "01";
@@ -16,10 +19,12 @@ describe('Index', () => {
     it("expect to process valid input", () => {
         const buffer = Buffer.from("0045000070473afaedd944000159fc5a40000000d3e542f6184a37820929465a0900000c00070100050005001d3a0c001e0ff0019300000192000000890000010041000004af004dc3", "hex");
         const response = process(buffer);
-
         expect(response).to.not.have.property('error');
         expect(response).to.have.property('data').that.is.an("object");
-        expect(response.data.imei).to.equal(parseInt(imei, 16));
+        const big = new Uint64BE(response.data.imei);
+
+
+        expect(parseInt(big.toString(16), 16)).to.equal(parseInt(imei,16));
         expect(response.data.command_id).to.equal(68);
     });
     it('expect to handle invalid input', () => {
@@ -90,4 +95,15 @@ describe('Index', () => {
         expect(response).to.have.property('error').that.is.an.instanceof(Error);
         expect(response.error.message).to.have.string("Records size is too small");
     });
+
+
+    // it("expect to handle 'Command_16' input with no value sent for records", () => {
+    //     const str = "9" + "3137CA7877138" + "10" + "7132";
+    //     const buffer = Buffer.from(str, "hex");
+    //     const response = process(buffer);
+
+    //     expect(response).to.not.have.property('data');
+    //     expect(response).to.have.property('error').that.is.an.instanceof(Error);
+    //     expect(response.error.message).to.have.string("Records are not found");
+    // });
 });
